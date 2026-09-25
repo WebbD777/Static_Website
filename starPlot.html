@@ -17,134 +17,85 @@
     <!-- Your CSS -->
     <link rel="stylesheet" href="css/style.css" />
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
+    <div class="Mathematics">
+          <h2 class="display-5">
+            Numerical analysis on the Hénon-Heiles model
+          </h2>
 
-  <body>
-    <h1>Star Plot</h1>
+          <p>
+            The goal is to obtain the orbit of a star with different initial
+            conditions.
 
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="exampleRadios"
-        id="exampleRadios1"
-        value="option1"
-        checked
-      />
-      <label class="form-check-label" for="exampleRadios1">
-        Stable Orbit
-      </label>
-    </div>
+          <div class="container text-center">
+            <div class="row row-cols-1 row-cols-md-2">
+              <!-- Equations of motion -->
+              <div class="col border border-primary border-2">
+                <p>
+                  <strong>First:</strong>
+                  Integrate the equations of motion using Runge-Kutta.
+                </p>
 
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="exampleRadios"
-        id="exampleRadios2"
-        value="option2"
-      />
-      <label class="form-check-label" for="exampleRadios2">
-        Input own orbit
-      </label>
-    </div>
+                <figure class="figure">
+                  <img
+                    src="images/portfolio/equationsMotion.png"
+                    class="figure-img img-fluid rounded"
+                    alt="Equations of motion"
+                  />
 
-    <div style="display: flex; justify-content: flex-end">
-      <button type="button" class="btn btn-primary" id="submitBtn">
-        Submit
-      </button>
-    </div>
+                  <figcaption class="figure-caption">
+                    Equations of motion.
+                  </figcaption>
+                </figure>
+              </div>
 
-    <label for="exampleFormControlInput1" class="form-label" id="form">
-      Experiment with orbit or try to make the star escape orbit
-    </label>
+              <!-- Energy -->
+              <div class="col border border-primary border-2">
+                <p>
+                  <strong>Second:</strong>
+                  Since the energy equation is conserved, it can be used to
+                  calculate the error.
+                  <br />
+                  I don't implement this; I use an iteration limit.
+                  <br /><br />
+                  An initial energy H0 is used to calculate the initial value
+                  for momentum in the x-direction.
+                </p>
 
-    <div class="container">
-      <div class="row row-cols-1">
-        <div class="col">
-          <label for="xRange" class="form-label" id="xName">
-            Position in x direction
-          </label>
+                <figure class="figure">
+                  <img
+                    src="images/portfolio/energyStar.png"
+                    class="figure-img img-fluid rounded"
+                    alt="Energy equation"
+                  />
 
-          <input
-            type="range"
-            class="form-range"
-            min="0"
-            max="0.5"
-            step="0.1"
-            id="xRange"
-          />
+                  <figcaption class="figure-caption">
+                    Energy equation.
+                  </figcaption>
+                </figure>
+              </div>
+
+              <!-- Initial conditions -->
+              <div class="col border border-primary border-2">
+                <p>
+                  <strong>Third:</strong>
+                  The equations for the initial conditions. Momentum in the
+                  x-direction is calculated from the other initial conditions.
+                </p>
+
+                <figure class="figure">
+                  <img
+                    src="images/portfolio/initialConditions.png"
+                    class="figure-img img-fluid rounded"
+                    alt="Equations for the initial conditions"
+                  />
+
+                  <figcaption class="figure-caption">
+                    Equations for the initial conditions.
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="col">
-          <label id="xLabel">numberX</label>
-        </div>
-
-        <div class="col">
-          <label for="yRange" class="form-label" id="yName">
-            Position in y direction
-          </label>
-
-          <input
-            type="range"
-            class="form-range"
-            min="0"
-            max="0.5"
-            step="0.1"
-            id="yRange"
-          />
-        </div>
-
-        <div class="col">
-          <label id="yLabel">numberY</label>
-        </div>
-
-        <div class="col">
-          <label for="pyRange" class="form-label" id="pyName">
-            Momentum in y direction
-          </label>
-
-          <input
-            type="range"
-            class="form-range"
-            min="0"
-            max="0.5"
-            step="0.1"
-            id="pyRange"
-          />
-        </div>
-
-        <div class="col">
-          <label id="pyLabel">numberPy</label>
-        </div>
-
-        <div class="col">
-          <label for="hRange" class="form-label" id="hName">
-            Initial energy of the Star
-          </label>
-
-          <input
-            type="range"
-            class="form-range"
-            min="0.125"
-            max="0.2"
-            step="0.001"
-            id="hRange"
-          />
-        </div>
-
-        <div class="col">
-          <label id="hLabel">number H0</label>
-        </div>
-      </div>
-    </div>
-
-    <canvas id="starChart" width="400" height="200"></canvas>
-
-    <!-- Your JavaScript -->
-    <script src="js/starScript.js"></script>
-  </body>
 </html>
 ```
