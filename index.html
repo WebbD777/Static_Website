@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My Website</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+<body>
+  <section class="hero is-link">
+    <div class="hero-body">
+      <p class="title">Dylan Webb</p>
+      <br />
+      <div class="box has-background-black has-text-warning">
+        <p class="subtitle">
+          I am a Software Engineer based in South Africa.<br />
+          I graduated in Applied, Maths & Computer Science, and love the
+          intersectionality of both.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <h1 class="title">Star Plot</h1>
+    <h2 class="subtitle">
+      This Maths project is a Numerical analysis on the Hénon-Heiles model. ,<br>
+      The goal is to find a stable orbit, or you can make the star escape orbit depending on the intial conditions you set.,<br>
+      An explanation of some of the Maths can be found here -> <button class="button is-primary is-small"> Star maths</button>
+    </h2>
+
+     <div class="container">
+    <div class="box">
+      
+        <h1>Star Plot</h1>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="exampleRadios1"
+            value="option1"
+            checked
+          />
+          <label class="form-check-label" for="exampleRadios1">
+            Stable Orbit
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="exampleRadios2"
+            value="option2"
+          />
+          <label class="form-check-label" for="exampleRadios2">
+            Input own orbit
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end">
+          <button type="button" class="button" id="submitBtn">Submit</button>
+        </div>
+
+        <label for="exampleFormControlInput1" class="form-label" id="form">
+          Experiment with orbit or try to make the star escape orbit
+        </label>
+
+        <div class="container">
+          <div class="row row-cols-1">
+            <div class="col">
+              <label for="xRange" class="form-label" id="xName">
+                Position in x direction
+              </label>
+
+              <input
+                type="range"
+                class="form-range"
+                min="0"
+                max="0.5"
+                step="0.1"
+                id="xRange"
+              />
+            </div>
+
+            <div class="col">
+              <label id="xLabel">numberX</label>
+            </div>
+
+            <div class="col">
+              <label for="yRange" class="form-label" id="yName">
+                Position in y direction
+              </label>
+
+              <input
+                type="range"
+                class="form-range"
+                min="0"
+                max="0.5"
+                step="0.1"
+                id="yRange"
+              />
+            </div>
+
+            <div class="col">
+              <label id="yLabel">numberY</label>
+            </div>
+
+            <div class="col">
+              <label for="pyRange" class="form-label" id="pyName">
+                Momentum in y direction
+              </label>
+
+              <input
+                type="range"
+                class="form-range"
+                min="0"
+                max="0.5"
+                step="0.1"
+                id="pyRange"
+              />
+            </div>
+
+            <div class="col">
+              <label id="pyLabel">numberPy</label>
+            </div>
+
+            <div class="col">
+              <label for="hRange" class="form-label" id="hName">
+                Initial energy of the Star
+              </label>
+
+              <input
+                type="range"
+                class="form-range"
+                min="0.125"
+                max="0.2"
+                step="0.001"
+                id="hRange"
+              />
+            </div>
+
+            <div class="col">
+              <label id="hLabel">number H0</label>
+            </div>
+          </div>
+        </div>
+
+        <canvas id="starChart" width="400" height="200"></canvas>
+
+        <script src="js/starScript.js"></script>
+      </body>
+    </div>
+  </div>
+
+  </section>
+
+  <section class="hero is-info">
+  <div class="hero-body">
+    <p class="title">Career</p>
+    <p class="subtitle">I have experience in the financial and remittance sector, <br>
+        And majority of my career has been as a backend engineer, and with the .NET framework.
+     </p>
+  </div>
+</section>
+
+<section class="hero is-small is-primary">
+  <div class="hero-body">
+    <p class="title">Portfolio</p>
+    <details class="box has-background-black has-text-warning">
+  <summary style="cursor: pointer; font-weight: bold;">
+    Treaury App (click to expand)
+  </summary>
+  <p style="margin-top: 0.75rem;">
+    Written in .NET MAUI, uses the API of the National Treasury, made available at: <a href="https://municipaldata.treasury.gov.za/" target="_blank" rel="noopener noreferrer">Tresury API</a> <br>
+    The application gets and displays yearly financial data for a chosen municipality. In this example, OR Tambo is selected.
+
+Code hosted on my <a href="https://github.com/WebbD777/tresuaryAPi2/tree/master" target="_blank" rel="noopener noreferrer">github</a>
+  </p>
+
+  <div class="row row-cols-1 row-cols-md-2">
+            <!-- Home screen -->
+            <div class="col border border-primary border-2">
+              <figure class="figure">
+                <img
+                  src="images/portfolio/phoneHome.png"
+                  class="figure-img img-fluid rounded"
+                  alt="First home screen of the application"
+                />
+
+                <figcaption class="figure-caption">
+                  First home screen.
+                </figcaption>
+              </figure>
+            </div>
+
+            <!-- Municipality selection -->
+            <div class="col border border-primary border-2">
+              <figure class="figure">
+                <img
+                  src="images/portfolio/phoneHomeOR.png"
+                  class="figure-img img-fluid rounded"
+                  alt="Municipality selection screen"
+                />
+
+                <figcaption class="figure-caption">
+                  Municipality selection.
+                </figcaption>
+              </figure>
+            </div>
+
+            <!-- Debt screen -->
+            <div class="col border border-primary border-2">
+              <figure class="figure">
+                <img
+                  src="images/portfolio/phoneDebt.png"
+                  class="figure-img img-fluid rounded"
+                  alt="Chosen municipality screen"
+                />
+
+                <figcaption class="figure-caption">
+                  Chosen municipality.
+                </figcaption>
+              </figure>
+            </div>
+
+            <!-- Debt selection -->
+            <div class="col border border-primary border-2">
+              <figure class="figure">
+                <img
+                  src="images/portfolio/phoneDebtChoose.png"
+                  class="figure-img img-fluid rounded"
+                  alt="Year and financial category selection"
+                />
+
+                <figcaption class="figure-caption">
+                  Inputted year and chosen financial category.
+                </figcaption>
+              </figure>
+            </div>
+
+            <!-- Amount -->
+            <div class="col border border-primary border-2">
+              <figure class="figure">
+                <img
+                  src="images/portfolio/phoneAmount.png"
+                  class="figure-img img-fluid rounded"
+                  alt="Yearly financial data"
+                />
+
+                <figcaption class="figure-caption">
+                  Municipality's chosen yearly financial data.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          
+        </div>
+</details>
+  </div>
+</section>
+
+  <div class="container px-0.2 text-center">
+    <div class="row gx-5">
+      <div class="col">
+        <div class="p-4">
+          <a
+            class="button is-primary is-large"
+            href="portfolio.html"
+            role="button"
+            >Portfolio</a
+          >
+          <a class="button is-primary is-large" href="about.html" role="button"
+            >About</a
+          >
+          <a
+            class="button is-primary is-large"
+            href="starPlot.html"
+            role="button"
+            >Star</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

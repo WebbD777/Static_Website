@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Star Plot</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <h1>Star Plot</h1>
+
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="exampleRadios"
+        id="exampleRadios1"
+        value="option1"
+        checked
+      />
+      <label class="form-check-label" for="exampleRadios1">
+        Stable Orbit
+      </label>
+    </div>
+
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="exampleRadios"
+        id="exampleRadios2"
+        value="option2"
+      />
+      <label class="form-check-label" for="exampleRadios2">
+        Input own orbit
+      </label>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end">
+      <button type="button" class="btn btn-primary" id="submitBtn">
+        Submit
+      </button>
+    </div>
+
+    <label for="exampleFormControlInput1" class="form-label" id="form">
+      Experiment with orbit or try to make the star escape orbit
+    </label>
+
+    <div class="container">
+      <div class="row row-cols-1">
+        <div class="col">
+          <label for="xRange" class="form-label" id="xName">
+            Position in x direction
+          </label>
+
+          <input
+            type="range"
+            class="form-range"
+            min="0"
+            max="0.5"
+            step="0.1"
+            id="xRange"
+          />
+        </div>
+
+        <div class="col">
+          <label id="xLabel">numberX</label>
+        </div>
+
+        <div class="col">
+          <label for="yRange" class="form-label" id="yName">
+            Position in y direction
+          </label>
+
+          <input
+            type="range"
+            class="form-range"
+            min="0"
+            max="0.5"
+            step="0.1"
+            id="yRange"
+          />
+        </div>
+
+        <div class="col">
+          <label id="yLabel">numberY</label>
+        </div>
+
+        <div class="col">
+          <label for="pyRange" class="form-label" id="pyName">
+            Momentum in y direction
+          </label>
+
+          <input
+            type="range"
+            class="form-range"
+            min="0"
+            max="0.5"
+            step="0.1"
+            id="pyRange"
+          />
+        </div>
+
+        <div class="col">
+          <label id="pyLabel">numberPy</label>
+        </div>
+
+        <div class="col">
+          <label for="hRange" class="form-label" id="hName">
+            Initial energy of the Star
+          </label>
+
+          <input
+            type="range"
+            class="form-range"
+            min="0.125"
+            max="0.2"
+            step="0.001"
+            id="hRange"
+          />
+        </div>
+
+        <div class="col">
+          <label id="hLabel">number H0</label>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="starChart" width="400" height="200"></canvas>
+
+    <!-- Your JavaScript -->
+    <script src="js/starScript.js"></script>
+  </body>
+</html>
+```
