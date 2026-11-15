@@ -1,0 +1,966 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>diary · block sequence writing</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Inter', sans-serif;
+    }
+
+    body {
+      background: #f7f2ec;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      color: #3b2e25;
+    }
+
+    .app {
+      max-width: 1100px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ---- top bar ---- */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .app-title {
+      font-family: 'Georgia', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: #4a3a2e;
+    }
+
+    .app-title span {
+      font-size: 1.1rem;
+      color: #b29c8b;
+      font-family: system-ui, sans-serif;
+      margin-left: 0.3rem;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .folder-btn, .new-entry-btn {
+      background: #d6c2b2;
+      border: none;
+      padding: 0.65rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      color: #2d211b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 10px rgba(160, 120, 90, 0.15);
+      transition: 0.15s;
+      font-weight: 500;
+    }
+
+    .folder-btn {
+      background: #ede3d9;
+      color: #6b5545;
+    }
+
+    .folder-btn:hover, .new-entry-btn:hover {
+      background: #cab5a4;
+      color: #2d211b;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(150, 110, 80, 0.25);
+    }
+
+    .folder-btn svg, .new-entry-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* ---- main grid: editor + pieces list ---- */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---- editor panel ---- */
+    .editor-panel {
+      background: #fffcf8;
+      border-radius: 2rem;
+      box-shadow: 0 15px 30px -10px rgba(90, 60, 40, 0.12),
+                  0 0 0 1px #ede3d9 inset;
+      padding: 1.8rem 1.6rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .editor-panel h2 {
+      font-family: 'Georgia', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #6b5545;
+      margin-bottom: -0.5rem;
+    }
+
+    .editor-sub {
+      font-size: 0.8rem;
+      color: #b6a395;
+      margin-bottom: 0.5rem;
+    }
+
+    .title-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1.3rem;
+      font-family: 'Georgia', serif;
+      color: #3b2e25;
+      padding: 0.3rem 0.2rem 0.5rem;
+      border-bottom: 2px solid #ede3d9;
+      letter-spacing: -0.01em;
+    }
+
+    .title-input::placeholder {
+      color: #cbbcb0;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.1rem;
+    }
+
+    /* ---- sequence blocks container ---- */
+    .blocks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .blocks-container::-webkit-scrollbar {
+      width: 4px;
+    }
+    .blocks-container::-webkit-scrollbar-thumb {
+      background: #ddd0c6;
+      border-radius: 10px;
+    }
+
+    .block-item {
+      background: #faf6f2;
+      border: 1px solid #ede3d9;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: relative;
+    }
+
+    .block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #b6a395;
+      font-family: system-ui, sans-serif;
+    }
+
+    .block-textarea {
+      width: 100%;
+      min-height: 100px;
+      resize: vertical;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #3b2e25;
+      font-family: 'Georgia', serif;
+    }
+
+    .block-image-preview {
+      width: 100%;
+      max-height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #ece2d8;
+    }
+
+    .block-controls {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .add-block-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .add-block-btn {
+      flex: 1;
+      background: #f3ece5;
+      border: 1px dashed #d6c6ba;
+      padding: 0.5rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: #6b5545;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: 0.15s;
+    }
+
+    .add-block-btn:hover {
+      background: #ede3d9;
+      border-color: #b7a08e;
+      color: #4a3a2e;
+    }
+
+    .add-block-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      background: #ffffff;
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 450;
+      color: #4e3d31;
+      cursor: pointer;
+      transition: 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 6px rgba(140, 110, 90, 0.08), 0 0 0 1px #e2d5cb;
+      font-family: system-ui, sans-serif;
+    }
+
+    .btn:hover {
+      background: #f6ede6;
+      box-shadow: 0 4px 10px rgba(130, 100, 80, 0.08), 0 0 0 1px #d6c6ba;
+    }
+
+    .btn-primary {
+      background: #d6c2b2;
+      color: #2d211b;
+      box-shadow: 0 3px 10px rgba(160, 120, 90, 0.2), 0 0 0 1px #c6b1a0;
+    }
+
+    .btn-primary:hover {
+      background: #cab5a4;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .save-status {
+      font-size: 0.8rem;
+      color: #b09e90;
+      margin-left: auto;
+      transition: opacity 0.2s;
+    }
+
+    /* ---- pieces list ---- */
+    .pieces-panel {
+      background: #fffcf8;
+      border-radius: 2rem;
+      box-shadow: 0 15px 30px -10px rgba(90, 60, 40, 0.12),
+                  0 0 0 1px #ede3d9 inset;
+      padding: 1.8rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 80vh;
+      overflow: hidden;
+    }
+
+    .pieces-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #ede3d9;
+    }
+
+    .pieces-header h3 {
+      font-family: 'Georgia', serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: #6b5545;
+    }
+
+    .piece-count {
+      font-size: 0.8rem;
+      color: #b6a395;
+      background: #f3ece5;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+    }
+
+    .pieces-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      padding-right: 0.3rem;
+    }
+
+    .pieces-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .pieces-list::-webkit-scrollbar-thumb {
+      background: #ddd0c6;
+      border-radius: 10px;
+    }
+
+    .piece-card {
+      background: #faf6f2;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid #ede3d9;
+      transition: 0.15s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .piece-card:hover {
+      background: #f6ede6;
+      border-color: #d6c6ba;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(120, 90, 70, 0.08);
+    }
+
+    .piece-card.active {
+      border-left: 4px solid #b7a08e;
+      background: #f6ede6;
+    }
+
+    .piece-title {
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4a3a2e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .piece-excerpt {
+      font-size: 0.8rem;
+      color: #8a7a6d;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+
+    .piece-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: #b6a395;
+      margin-top: 0.2rem;
+    }
+
+    .piece-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.2rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8a7a6d;
+      transition: 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: #ede3d9;
+      color: #4a3a2e;
+    }
+
+    .icon-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .empty-pieces {
+      color: #b6a395;
+      font-style: italic;
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #4a3a2e;
+      color: #fffcf8;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- top bar -->
+    <div class="top-bar">
+      <div class="app-title">my diary <span>✎</span></div>
+      <div class="top-actions">
+        <button class="folder-btn" id="selectFolderBtn">
+          <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span id="folderLabel">set writings folder</span>
+        </button>
+        <button class="new-entry-btn" id="newEntryBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          new piece
+        </button>
+      </div>
+    </div>
+
+    <!-- main grid -->
+    <div class="main-grid">
+      <!-- editor panel -->
+      <div class="editor-panel">
+        <h2 id="editorHeading">new piece</h2>
+        <div class="editor-sub" id="editorSub">write in sequence: text & photos</div>
+
+        <input type="text" class="title-input" id="titleInput" placeholder="give it a title…" maxlength="80" />
+
+        <div class="blocks-container" id="blocksContainer">
+          <!-- blocks injected dynamically -->
+        </div>
+
+        <div class="add-block-bar">
+          <button class="add-block-btn" id="addTextBtn">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> add text block
+          </button>
+          <button class="add-block-btn" id="addPhotoBtn">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> add photo block
+          </button>
+        </div>
+
+        <div class="editor-actions">
+          <button class="btn btn-primary" id="saveBtn">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            save & export piece
+          </button>
+          <button class="btn" id="clearBtn">
+            <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0v12m4-12v12"/></svg>
+            clear
+          </button>
+          <span class="save-status" id="saveStatus"></span>
+        </div>
+      </div>
+
+      <!-- pieces list -->
+      <div class="pieces-panel">
+        <div class="pieces-header">
+          <h3>my pieces</h3>
+          <span class="piece-count" id="pieceCount">0 pieces</span>
+        </div>
+        <div class="pieces-list" id="piecesList">
+          <div class="empty-pieces">no pieces yet — start writing ✍️</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function() {
+      let pieces = [];
+      let currentEditId = null;
+      let blocks = []; // Array of { type: 'text'|'image', content: '' }
+      let writingsDirectoryHandle = null;
+
+      const titleInput = document.getElementById('titleInput');
+      const blocksContainer = document.getElementById('blocksContainer');
+      const addTextBtn = document.getElementById('addTextBtn');
+      const addPhotoBtn = document.getElementById('addPhotoBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const saveStatus = document.getElementById('saveStatus');
+      const piecesList = document.getElementById('piecesList');
+      const pieceCount = document.getElementById('pieceCount');
+      const newEntryBtn = document.getElementById('newEntryBtn');
+      const editorHeading = document.getElementById('editorHeading');
+      const editorSub = document.getElementById('editorSub');
+      const selectFolderBtn = document.getElementById('selectFolderBtn');
+      const folderLabel = document.getElementById('folderLabel');
+      const toast = document.getElementById('toast');
+
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+      }
+
+      function formatDate(ts) {
+        const d = new Date(ts);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+      }
+
+      function truncate(str, n) {
+        if (!str) return '';
+        return str.length > n ? str.slice(0, n) + '…' : str;
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      selectFolderBtn.addEventListener('click', async () => {
+        if (!window.showDirectoryPicker) {
+          alert('Folder selection is not supported in this browser. Files will download normally.');
+          return;
+        }
+        try {
+          writingsDirectoryHandle = await window.showDirectoryPicker();
+          folderLabel.textContent = writingsDirectoryHandle.name + ' folder';
+          showToast('writings folder linked ✓');
+        } catch (err) {
+          if (err.name !== 'AbortError') console.warn(err);
+        }
+      });
+
+      function loadPieces() {
+        try {
+          const raw = localStorage.getItem('diaryPiecesBlocks');
+          if (raw) pieces = JSON.parse(raw);
+        } catch (e) { pieces = []; }
+        renderPiecesList();
+      }
+
+      function savePiecesToStorage() {
+        try {
+          localStorage.setItem('diaryPiecesBlocks', JSON.stringify(pieces));
+        } catch (e) {
+          showToast('⚠ storage full');
+        }
+      }
+
+      // Render blocks into the editor DOM
+      function renderBlocks() {
+        if (blocks.length === 0) {
+          blocksContainer.innerHTML = '<div class="empty-pieces" style="padding:1rem 0;">Add a text or photo block to begin ✍️</div>';
+          return;
+        }
+
+        blocksContainer.innerHTML = blocks.map((b, idx) => {
+          if (b.type === 'text') {
+            return `
+              <div class="block-item" data-index="${idx}">
+                <div class="block-header">
+                  <span>text block #${idx + 1}</span>
+                  <div class="block-controls">
+                    <button class="icon-btn move-up" data-index="${idx}" title="move up">▲</button>
+                    <button class="icon-btn move-down" data-index="${idx}" title="move down">▼</button>
+                    <button class="icon-btn delete-block" data-index="${idx}" title="delete block">&times;</button>
+                  </div>
+                </div>
+                <textarea class="block-textarea" placeholder="write your heart out…">${escapeHtml(b.content)}</textarea>
+              </div>
+            `;
+          } else {
+            return `
+              <div class="block-item" data-index="${idx}">
+                <div class="block-header">
+                  <span>photo block #${idx + 1}</span>
+                  <div class="block-controls">
+                    <button class="icon-btn move-up" data-index="${idx}" title="move up">▲</button>
+                    <button class="icon-btn move-down" data-index="${idx}" title="move down">▼</button>
+                    <button class="icon-btn delete-block" data-index="${idx}" title="delete block">&times;</button>
+                  </div>
+                </div>
+                ${b.content ? `<img src="${b.content}" class="block-image-preview" />` : ''}
+                <button class="add-block-btn upload-block-img" data-index="${idx}">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                  ${b.content ? 'change photo' : 'upload photo'}
+                </button>
+                <input type="file" class="hidden-file-input" accept="image/*" style="display:none" data-index="${idx}" />
+              </div>
+            `;
+          }
+        }).join('');
+
+        // Attach event listeners to textareas and buttons
+        blocksContainer.querySelectorAll('.block-textarea').forEach(ta => {
+          ta.addEventListener('input', (e) => {
+            const idx = parseInt(e.target.closest('.block-item').dataset.index);
+            blocks[idx].content = e.target.value;
+          });
+        });
+
+        blocksContainer.querySelectorAll('.delete-block').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            blocks.splice(idx, 1);
+            renderBlocks();
+          });
+        });
+
+        blocksContainer.querySelectorAll('.move-up').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            if (idx > 0) {
+              const temp = blocks[idx];
+              blocks[idx] = blocks[idx - 1];
+              blocks[idx - 1] = temp;
+              renderBlocks();
+            }
+          });
+        });
+
+        blocksContainer.querySelectorAll('.move-down').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            if (idx < blocks.length - 1) {
+              const temp = blocks[idx];
+              blocks[idx] = blocks[idx + 1];
+              blocks[idx + 1] = temp;
+              renderBlocks();
+            }
+          });
+        });
+
+        blocksContainer.querySelectorAll('.upload-block-img').forEach(btn => {
+          const idx = btn.dataset.index;
+          const fileInput = blocksContainer.querySelector(`.hidden-file-input[data-index="${idx}"]`);
+          btn.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              blocks[idx].content = ev.target.result;
+              renderBlocks();
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+      }
+
+      addTextBtn.addEventListener('click', () => {
+        blocks.push({ type: 'text', content: '' });
+        renderBlocks();
+        blocksContainer.scrollTop = blocksContainer.scrollHeight;
+      });
+
+      addPhotoBtn.addEventListener('click', () => {
+        blocks.push({ type: 'image', content: '' });
+        renderBlocks();
+        blocksContainer.scrollTop = blocksContainer.scrollHeight;
+      });
+
+      function renderPiecesList() {
+        pieceCount.textContent = pieces.length + (pieces.length === 1 ? ' piece' : ' pieces');
+        if (pieces.length === 0) {
+          piecesList.innerHTML = '<div class="empty-pieces">no pieces yet — start writing ✍️</div>';
+          return;
+        }
+
+        const sorted = [...pieces].sort((a, b) => b.updatedAt - a.updatedAt);
+
+        piecesList.innerHTML = sorted.map(p => {
+          const firstText = (p.blocks || []).find(b => b.type === 'text');
+          const excerpt = firstText ? truncate(firstText.content.replace(/\n/g, ' '), 60) : 'sequential entry';
+          const activeClass = (currentEditId === p.id) ? ' active' : '';
+          return `
+            <div class="piece-card${activeClass}" data-id="${p.id}">
+              <div class="piece-title">${escapeHtml(p.title || 'untitled')}</div>
+              <div class="piece-excerpt">${escapeHtml(excerpt)}</div>
+              <div class="piece-meta">
+                <span>${formatDate(p.updatedAt)}</span>
+                <div class="piece-actions">
+                  <button class="icon-btn open-file-btn" data-id="${p.id}" title="open entry file">
+                    <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </button>
+                  <button class="icon-btn delete-piece-btn" data-id="${p.id}" title="delete piece">
+                    <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        piecesList.querySelectorAll('.piece-card').forEach(card => {
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.icon-btn')) return;
+            loadPieceForEdit(card.dataset.id);
+          });
+        });
+
+        piecesList.querySelectorAll('.open-file-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openPieceFile(btn.dataset.id);
+          });
+        });
+
+        piecesList.querySelectorAll('.delete-piece-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deletePiece(btn.dataset.id);
+          });
+        });
+      }
+
+      function loadPieceForEdit(id) {
+        const piece = pieces.find(p => p.id === id);
+        if (!piece) return;
+        currentEditId = id;
+        titleInput.value = piece.title || '';
+        blocks = JSON.parse(JSON.stringify(piece.blocks || []));
+        renderBlocks();
+        editorHeading.textContent = 'editing piece';
+        editorSub.textContent = 'last saved ' + formatDate(piece.updatedAt);
+        saveStatus.textContent = '';
+        renderPiecesList();
+      }
+
+      function resetEditor() {
+        currentEditId = null;
+        titleInput.value = '';
+        blocks = [{ type: 'text', content: '' }];
+        renderBlocks();
+        editorHeading.textContent = 'new piece';
+        editorSub.textContent = 'write in sequence: text & photos';
+        saveStatus.textContent = '';
+        renderPiecesList();
+      }
+
+      async function generateHtmlBlob(piece) {
+        const safeTitle = escapeHtml(piece.title || 'untitled');
+        const safeDate = escapeHtml(formatDate(piece.updatedAt));
+
+        const bodyContent = (piece.blocks || []).map(b => {
+          if (b.type === 'text') {
+            return `<div class="content-block">${escapeHtml(b.content || '')}</div>`;
+          } else if (b.type === 'image' && b.content) {
+            return `<div class="image-block"><img src="${b.content}" alt="diary memory" /></div>`;
+          }
+          return '';
+        }).join('');
+
+        const content = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${safeTitle}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f7f2ec; color: #3b2e25; font-family: 'Georgia', serif; padding: 2.5rem 1.2rem; display: flex; justify-content: center; }
+    .card { background: #fffcf8; max-width: 680px; width: 100%; border-radius: 2rem; padding: 2.5rem; box-shadow: 0 15px 30px rgba(90,60,40,0.1); display: flex; flex-direction: column; gap: 1.5rem; }
+    .meta { font-family: sans-serif; font-size: 0.8rem; color: #b6a395; margin-bottom: -0.8rem; }
+    h1 { font-size: 1.8rem; font-weight: 400; color: #4a3a2e; padding-bottom: 1rem; border-bottom: 2px solid #ede3d9; }
+    .content-block { font-size: 1.05rem; line-height: 1.9; white-space: pre-wrap; word-wrap: break-word; }
+    .image-block img { width: 100%; border-radius: 1.2rem; border: 1px solid #ece2d8; box-shadow: 0 4px 12px rgba(90,60,40,0.06); }
+  </style>
+</head>
+<body>
+  <article class="card">
+    <div class="meta">${safeDate}</div>
+    <h1>${safeTitle}</h1>
+    ${bodyContent}
+  </article>
+</body>
+</html>`;
+        return new Blob([content], { type: 'text/html;charset=utf-8' });
+      }
+
+      async function exportPiece(piece) {
+        const slug = (piece.title || 'untitled').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'entry';
+        const filename = `${slug}.html`;
+        const blob = await generateHtmlBlob(piece);
+
+        if (writingsDirectoryHandle) {
+          try {
+            const fileHandle = await writingsDirectoryHandle.getFileHandle(filename, { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+            showToast(`saved to folder: ${filename}`);
+            return;
+          } catch (e) { console.warn(e); }
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`downloaded ${filename}`);
+      }
+
+      async function openPieceFile(id) {
+        const piece = pieces.find(p => p.id === id);
+        if (!piece) return;
+        const blob = await generateHtmlBlob(piece);
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+
+      saveBtn.addEventListener('click', async () => {
+        const title = titleInput.value.trim() || 'untitled';
+        if (blocks.length === 0) {
+          showToast('add at least one text or photo block');
+          return;
+        }
+
+        const now = Date.now();
+        let piece;
+
+        if (currentEditId) {
+          const idx = pieces.findIndex(p => p.id === currentEditId);
+          if (idx !== -1) {
+            pieces[idx] = { ...pieces[idx], title, blocks: JSON.parse(JSON.stringify(blocks)), updatedAt: now };
+            piece = pieces[idx];
+          }
+        } else {
+          piece = { id: generateId(), title, blocks: JSON.parse(JSON.stringify(blocks)), createdAt: now, updatedAt: now };
+          pieces.push(piece);
+          currentEditId = piece.id;
+        }
+
+        savePiecesToStorage();
+        renderPiecesList();
+        await exportPiece(piece);
+
+        editorHeading.textContent = 'editing piece';
+        editorSub.textContent = 'last saved just now';
+        saveStatus.textContent = '✓ saved & exported';
+        setTimeout(() => { saveStatus.textContent = ''; }, 2000);
+      });
+
+      clearBtn.addEventListener('click', () => {
+        if (confirm('clear the editor?')) {
+          resetEditor();
+          showToast('editor cleared');
+        }
+      });
+
+      newEntryBtn.addEventListener('click', () => {
+        resetEditor();
+        titleInput.focus();
+      });
+
+      function deletePiece(id) {
+        const piece = pieces.find(p => p.id === id);
+        if (!piece) return;
+        if (confirm(`delete "${piece.title || 'untitled'}"?`)) {
+          pieces = pieces.filter(p => p.id !== id);
+          savePiecesToStorage();
+          if (currentEditId === id) resetEditor();
+          else renderPiecesList();
+          showToast('piece deleted');
+        }
+      }
+
+      loadPieces();
+      if (pieces.length === 0 && blocks.length === 0) {
+        blocks.push({ type: 'text', content: '' });
+      }
+      renderBlocks();
+      if (!currentEditId) titleInput.focus();
+    })();
+  </script>
+</body>
+</html> -->
